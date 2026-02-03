@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dressify - Outfit Customization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Landing Page Styles */
+        .landing-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .landing-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-section img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .logo-section h1 {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .intro-text {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            margin-top: 30px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .signup-link {
+            margin-top: 15px;
+            color: #666;
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+
+        .dashboard.active {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .nav-menu {
+            margin-bottom: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .sidebar-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-info p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .breadcrumb {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            position: relative;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .category-overlay h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Clothing Types Grid */
+        .clothing-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .type-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .type-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .type-card h3 {
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .product-price {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        /* Customize Page */
+        .customize-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 500px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .product-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        .customization-section h2 {
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .custom-option {
+            margin-bottom: 30px;
+        }
+
+        .custom-option h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 3px solid transparent;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #667eea;
+        }
+
+        .pattern-options,
+        .design-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pattern-btn,
+        .design-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-btn:hover,
+        .design-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .pattern-btn.active,
+        .design-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .selection-summary {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .selection-summary p {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .btn-size-chart {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-size-chart:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-save {
+            margin-top: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 32px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+
+        .size-chart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .size-chart-table th,
+        .size-chart-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .size-chart-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .size-chart-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .fabric-info {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .fabric-info h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .fabric-info ul {
+            list-style: none;
+        }
+
+        .fabric-info li {
+            padding: 8px 0;
+            color: #555;
+        }
+
+        /* Saved Designs */
+        .saved-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .saved-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .saved-image {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .saved-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .saved-info {
+            padding: 20px;
+        }
+
+        .saved-info h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .design-details p {
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .saved-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-download {
+            flex: 1;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background: #5568d3;
+        }
+
+        .btn-delete {
+            padding: 10px 20px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #ee3f4f;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state h2 {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Signup Modal Styles */
+        .signup-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-modal.active {
+            display: flex;
+        }
+
+        .signup-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .signup-modal-close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 32px;
+            color: #aaa;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .signup-modal-close:hover {
+            color: #000;
+        }
+
+        .signup-form-group {
+            margin-bottom: 20px;
+        }
+
+        .signup-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .signup-form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .signup-form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .signup-form-group .form-error {
+            color: #ff4757;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .signup-form-group .form-error.show {
+            display: block;
+        }
+
+        .signup-modal h2 {
+            margin-bottom: 25px;
+            color: #333;
+            text-align: center;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .form-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* Part Selector Buttons */
+        .part-selector {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .part-selector:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .part-selector.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Profile Styles */
+        .profile-container {
+            max-width: 600px;
+            margin-top: 30px;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-card h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-group {
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-group:last-child {
+            border-bottom: none;
+        }
+
+        .info-group label {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .info-group p {
+            color: #333;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Landing Page -->
+    <div id="landingPage" class="landing-page">
+        <div class="landing-container">
+            <div class="logo-section">
+                <img src="logo.png" alt="Dressify Logo">
+                <h1>Dressify</h1>
+                <p class="tagline">Your Style, Your Way</p>
+            </div>
+
+            <div class="intro-text">
+                Dressify is an outfit customization website that allows users to design, personalize, and save outfits
+                by choosing colors, patterns, and styles.
+            </div>
+
+            <div class="login-form">
+                <h2 style="margin-bottom: 20px;">User Login</h2>
+                <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                <button class="btn btn-login" onclick="handleLogin()">Login</button>
+                <p class="signup-link"><a href="#" onclick="openForgotPasswordModal(); return false;"
+                        style="color: #667eea; text-decoration: none; font-weight: 600;">Forgot password?</a>
+                </p>
+                <p class="signup-link">Don't have an account? <a href="#" onclick="openSignupModal()">Sign up here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <div class="sidebar">
+            <h2>DRESSIFY</h2>
+            <div class="nav-menu">
+                <div class="nav-item" onclick="showPage('category')">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" onclick="showPage('saved')">
+                    <span>💾</span>
+                    <span>Saved Designs</span>
+                </div>
+                <div class="nav-item" onclick="showPage('profile')">
+                    <span>👤</span>
+                    <span>Profile</span>
+                </div>
+                <div class="nav-item" onclick="handleLogout()">
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </div>
+            </div>
+            <div class="sidebar-info">
+                <h3>What's Here?</h3>
+                <p>Browse our collection, customize designs, and save your favorites!</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Category Selection Page -->
+            <div id="categoryPage" class="page-content">
+                <h1 class="page-title">Choose Your Category</h1>
+                <p class="page-subtitle">Select a category to start customizing your outfit</p>
+
+                <div class="category-grid">
+                    <div class="category-card" onclick="selectCategory('men')">
+                        <img src="https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=500&h=600&fit=crop"
+                            alt="Men's Fashion">
+                        <div class="category-overlay">
+                            <h2>MEN</h2>
+                            <p>Explore Men's Collection</p>
+                        </div>
+                    </div>
+                    <div class="category-card" onclick="selectCategory('women')">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500&h=600&fit=crop"
+                            alt="Women's Fashion">
+                        <div class="category-overlay">
+                            <h2>WOMEN</h2>
+                            <p>Explore Women's Collection</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clothing Types Page -->
+            <div id="typesPage" class="page-content hidden">
+                <div class="breadcrumb">
+                    <a onclick="showPage('category')">Categories</a> > <span id="currentCategory"></span>
+                </div>
+                <h1 class="page-title" id="typesTitle"></h1>
+                <div class="clothing-types-grid" id="typesGrid"></div>
+            </div>
+
+            <!-- Products Page -->
+            <div id="productsPage" class="page-content hidden">
+                <div class="breadcrumb">
+                    <a onclick="showPage('category')">Categories</a> >
+                    <a onclick="showPage('types')"><span id="breadcrumbCategory"></span></a> >
+                    <span id="breadcrumbType"></span>
+                </div>
+                <h1 class="page-title" id="productsTitle"></h1>
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+
+            <!-- Customize Page -->
+            <div id="customizePage" class="page-content hidden">
+                <div class="breadcrumb">
+                    <a onclick="showPage('category')">Categories</a> >
+                    <a onclick="showPage('types')"><span id="customBreadcrumbCat"></span></a> >
+                    <a onclick="showPage('products')"><span id="customBreadcrumbType"></span></a> >
+                    Customize
+                </div>
+
+                <div class="customize-container">
+                    <div class="preview-section">
+                        <div class="product-preview">
+                            <img id="previewImage" src="" alt="Product Preview">
+                        </div>
+                        <button class="btn-size-chart" onclick="showSizeChart()">📏 View Size Chart</button>
+                    </div>
+
+                    <div class="customization-section">
+                        <h2>Customize Your Design</h2>
+
+                        <div class="custom-option">
+                            <h3>Select Part to Color</h3>
+                            <div class="part-selection"
+                                style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                                <button class="part-selector active" id="partFull" onclick="selectDressPart('full')">👗
+                                    Full Dress</button>
+                                <button class="part-selector" id="partTop" onclick="selectDressPart('top')">👔
+                                    Top</button>
+                                <button class="part-selector" id="partMiddle" onclick="selectDressPart('middle')">⏳
+                                    Middle</button>
+                                <button class="part-selector" id="partBottom" onclick="selectDressPart('bottom')">👖
+                                    Bottom</button>
+                            </div>
+                        </div>
+
+                        <div class="custom-option">
+                            <h3>Color</h3>
+                            <div class="color-palette" id="colorPalette"></div>
+                        </div>
+
+                        <div class="custom-option">
+                            <h3>Pattern</h3>
+                            <div class="pattern-options" id="patternOptions"></div>
+                        </div>
+
+                        <div class="custom-option">
+                            <h3>Design Style</h3>
+                            <div class="design-options" id="designOptions"></div>
+                        </div>
+
+                        <div class="custom-option">
+                            <h3>Current Selection</h3>
+                            <div class="selection-summary">
+                                <p><strong>Color:</strong> <span id="selectedColor">Default</span></p>
+                                <p><strong>Pattern:</strong> <span id="selectedPattern">Solid</span></p>
+                                <p><strong>Design:</strong> <span id="selectedDesign">Classic</span></p>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-login btn-save" onclick="saveDesign()">💾 Save to My Designs</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Designs Page -->
+            <div id="savedPage" class="page-content hidden">
+                <h1 class="page-title">My Saved Designs</h1>
+                <p class="page-subtitle">View and download your customized outfits</p>
+                <div id="savedGrid" class="saved-grid"></div>
+                <div id="emptyState" class="empty-state hidden">
+                    <h2>No Saved Designs Yet</h2>
+                    <p>Start customizing outfits and save your favorite designs!</p>
+                    <button class="btn btn-login" onclick="showPage('category')">Browse Collection</button>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="profilePage" class="page-content hidden">
+                <h1 class="page-title">My Profile</h1>
+                <p class="page-subtitle">View and update your account information</p>
+                <div id="profileContent" class="profile-container">
+                    <div class="profile-card">
+                        <h2>Account Information</h2>
+                        <div class="profile-info">
+                            <div class="info-group">
+                                <label>Full Name:</label>
+                                <p id="profileFullName">-</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Email:</label>
+                                <p id="profileEmail">-</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Username:</label>
+                                <p id="profileUsername">-</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Phone:</label>
+                                <p id="profilePhone">-</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Address:</label>
+                                <p id="profileAddress">-</p>
+                            </div>
+                            <div class="info-group">
+                                <label>Member Since:</label>
+                                <p id="profileCreatedAt">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Size Chart Modal -->
+    <div id="sizeChartModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeSizeChart()">&times;</span>
+            <h2>Size Chart</h2>
+
+            <table class="size-chart-table">
+                <thead>
+                    <tr>
+                        <th>Size</th>
+                        <th>Bust (cm)</th>
+                        <th>Waist (cm)</th>
+                        <th>Hips (cm)</th>
+                        <th>Length (cm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>XS</td>
+                        <td>80-84</td>
+                        <td>60-64</td>
+                        <td>86-90</td>
+                        <td>58</td>
+                    </tr>
+                    <tr>
+                        <td>S</td>
+                        <td>84-88</td>
+                        <td>64-68</td>
+                        <td>90-94</td>
+                        <td>60</td>
+                    </tr>
+                    <tr>
+                        <td>M</td>
+                        <td>88-92</td>
+                        <td>68-72</td>
+                        <td>94-98</td>
+                        <td>62</td>
+                    </tr>
+                    <tr>
+                        <td>L</td>
+                        <td>92-96</td>
+                        <td>72-76</td>
+                        <td>98-102</td>
+                        <td>64</td>
+                    </tr>
+                    <tr>
+                        <td>XL</td>
+                        <td>96-100</td>
+                        <td>76-80</td>
+                        <td>102-106</td>
+                        <td>66</td>
+                    </tr>
+                    <tr>
+                        <td>XXL</td>
+                        <td>100-106</td>
+                        <td>80-86</td>
+                        <td>106-112</td>
+                        <td>68</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="fabric-info">
+                <h3>Fabric Information</h3>
+                <ul>
+                    <li><strong>Material:</strong> 100% Cotton / Cotton Blend</li>
+                    <li><strong>Weight:</strong> 180 GSM</li>
+                    <li><strong>Care:</strong> Machine wash cold, tumble dry low</li>
+                    <li><strong>Stretch:</strong> Slight stretch</li>
+                    <li><strong>Opacity:</strong> Non-sheer</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="signup-modal">
+        <div class="signup-modal-content">
+            <button class="signup-modal-close" onclick="closeForgotPasswordModal()">&times;</button>
+            <h2>Reset Your Password</h2>
+
+            <div id="forgotPasswordMessage" class="form-message"></div>
+
+            <form id="forgotPasswordForm" onsubmit="handleResetPassword(event)">
+                <div class="signup-form-group">
+                    <label for="resetEmail">Email Address *</label>
+                    <input type="email" id="resetEmail" placeholder="Enter your registered email" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="newPassword">New Password *</label>
+                    <input type="password" id="newPassword" placeholder="Enter at least 6 characters" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="confirmNewPassword">Confirm Password *</label>
+                    <input type="password" id="confirmNewPassword" placeholder="Confirm your new password" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <button type="submit" class="signup-btn" id="resetPasswordSubmitBtn">Reset Password</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; color: #666;">
+                Remember your password? <a href="#" onclick="closeForgotPasswordModal()"
+                    style="color: #667eea; text-decoration: none; font-weight: 600;">Back to login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="signup-modal">
+        <div class="signup-modal-content">
+            <button class="signup-modal-close" onclick="closeSignupModal()">&times;</button>
+            <h2>Create Your Account</h2>
+
+            <div id="signupMessage" class="form-message"></div>
+
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="signup-form-group">
+                    <label for="signupFullName">Full Name *</label>
+                    <input type="text" id="signupFullName" placeholder="Enter your full name" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="signupUsername">Username *</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username (3+ characters)" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="signupEmail">Email *</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="signupPhone">Phone Number</label>
+                    <input type="tel" id="signupPhone" placeholder="Enter your phone number (optional)">
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="signupAddress">Address</label>
+                    <input type="text" id="signupAddress" placeholder="Enter your address (optional)">
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="signupPassword">Password *</label>
+                    <input type="password" id="signupPassword" placeholder="At least 6 characters" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="signup-form-group">
+                    <label for="signupConfirmPassword">Confirm Password *</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                    <span class="form-error"></span>
+                </div>
+
+                <button type="submit" class="signup-btn" id="signupSubmitBtn">Create Account</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; color: #666;">
+                Already have an account? <a href="#" onclick="closeSignupModal()"
+                    style="color: #667eea; text-decoration: none; font-weight: 600;">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Close signup modal when clicking outside
+        window.onclick = function (event) {
+            const sizeModal = document.getElementById('sizeChartModal');
+            const signupModal = document.getElementById('signupModal');
+
+            if (event.target === sizeModal) {
+                closeSizeChart();
+            }
+            if (event.target === signupModal) {
+                closeSignupModal();
+            }
+        }
+
+        function openSignupModal() {
+            document.getElementById('signupModal').classList.add('active');
+            resetSignupForm();
+        }
+
+        function closeSignupModal() {
+            document.getElementById('signupModal').classList.remove('active');
+            resetSignupForm();
+        }
+
+        function resetSignupForm() {
+            document.getElementById('signupForm').reset();
+            document.getElementById('signupMessage').classList.remove('success', 'error');
+            document.getElementById('signupMessage').textContent = '';
+            document.querySelectorAll('.form-error').forEach(el => el.classList.remove('show'));
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById('signupFullName').value.trim();
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const address = document.getElementById('signupAddress').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+            // Clear previous errors
+            document.querySelectorAll('.form-error').forEach(el => el.classList.remove('show'));
+
+            // Validation
+            let hasError = false;
+
+            if (!fullName) {
+                showError('signupFullName', 'Full name is required');
+                hasError = true;
+            }
+
+            if (username.length < 3) {
+                showError('signupUsername', 'Username must be at least 3 characters');
+                hasError = true;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                showError('signupEmail', 'Please enter a valid email');
+                hasError = true;
+            }
+
+            if (password.length < 6) {
+                showError('signupPassword', 'Password must be at least 6 characters');
+                hasError = true;
+            }
+
+            if (password !== confirmPassword) {
+                showError('signupConfirmPassword', 'Passwords do not match');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Disable submit button
+            const submitBtn = document.getElementById('signupSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Account...';
+
+            // Send signup request
+            fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    full_name: fullName,
+                    username: username,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    password: password,
+                    confirm_password: confirmPassword
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const messageDiv = document.getElementById('signupMessage');
+
+                    if (data.success) {
+                        messageDiv.classList.remove('error');
+                        messageDiv.classList.add('success');
+                        messageDiv.textContent = 'Account created successfully! You can now login.';
+                        resetSignupForm();
+
+                        setTimeout(() => {
+                            closeSignupModal();
+                            // Optionally set email to login field
+                            document.getElementById('loginEmail').value = email;
+                        }, 2000);
+                    } else {
+                        messageDiv.classList.remove('success');
+                        messageDiv.classList.add('error');
+                        messageDiv.textContent = data.message || 'Signup failed. Please try again.';
+                    }
+                })
+                .catch(error => {
+                    const messageDiv = document.getElementById('signupMessage');
+                    messageDiv.classList.remove('success');
+                    messageDiv.classList.add('error');
+                    messageDiv.textContent = 'Error: ' + error.message;
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Account';
+                });
+        }
+
+        function showError(fieldId, message) {
+            const input = document.getElementById(fieldId);
+            const errorSpan = input.nextElementSibling;
+            if (errorSpan && errorSpan.classList.contains('form-error')) {
+                errorSpan.textContent = message;
+                errorSpan.classList.add('show');
+            }
+        }
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('active');
+            resetForgotPasswordForm();
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+            resetForgotPasswordForm();
+        }
+
+        function resetForgotPasswordForm() {
+            document.getElementById('forgotPasswordForm').reset();
+            document.getElementById('forgotPasswordMessage').classList.remove('success', 'error');
+            document.getElementById('forgotPasswordMessage').textContent = '';
+            document.querySelectorAll('#forgotPasswordModal .form-error').forEach(el => el.classList.remove('show'));
+        }
+
+        function handleResetPassword(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('resetEmail').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+
+            // Clear previous errors
+            document.querySelectorAll('#forgotPasswordModal .form-error').forEach(el => el.classList.remove('show'));
+
+            // Validation
+            let hasError = false;
+
+            if (!email.includes('@') || !email.includes('.')) {
+                showErrorInModal('resetEmail', 'Please enter a valid email');
+                hasError = true;
+            }
+
+            if (newPassword.length < 6) {
+                showErrorInModal('newPassword', 'Password must be at least 6 characters');
+                hasError = true;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showErrorInModal('confirmNewPassword', 'Passwords do not match');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Disable submit button
+            const submitBtn = document.getElementById('resetPasswordSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Resetting Password...';
+
+            // Send reset password request
+            fetch('/api/auth/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    new_password: newPassword,
+                    confirm_password: confirmPassword
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const messageDiv = document.getElementById('forgotPasswordMessage');
+
+                    if (data.success) {
+                        messageDiv.classList.remove('error');
+                        messageDiv.classList.add('success');
+                        messageDiv.textContent = data.message || 'Password reset successfully!';
+                        resetForgotPasswordForm();
+
+                        setTimeout(() => {
+                            closeForgotPasswordModal();
+                            // Set email to login field
+                            document.getElementById('loginEmail').value = email;
+                        }, 2000);
+                    } else {
+                        messageDiv.classList.remove('success');
+                        messageDiv.classList.add('error');
+                        messageDiv.textContent = data.message || 'Password reset failed. Please try again.';
+                    }
+                })
+                .catch(error => {
+                    const messageDiv = document.getElementById('forgotPasswordMessage');
+                    messageDiv.classList.remove('success');
+                    messageDiv.classList.add('error');
+                    messageDiv.textContent = 'Error: ' + error.message;
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Reset Password';
+                });
+        }
+
+        function showErrorInModal(fieldId, message) {
+            const input = document.getElementById(fieldId);
+            const errorSpan = input.nextElementSibling;
+            if (errorSpan && errorSpan.classList.contains('form-error')) {
+                errorSpan.textContent = message;
+                errorSpan.classList.add('show');
+            }
+        }
+
+        const appData = {
+            currentUser: null,
+            selectedCategory: '',
+            selectedType: '',
+            selectedProduct: null,
+            selectedParts: {
+                top: false,
+                middle: false,
+                bottom: false,
+                full: true
+            },
+            currentCustomization: {
+                color: '#FF6B6B',
+                colorName: 'Red',
+                pattern: 'Solid',
+                design: 'Classic'
+            },
+            partColors: {
+                top: '#FF6B6B',
+                middle: '#FF6B6B',
+                bottom: '#FF6B6B'
+            }
+        };
+        const clothingTypes = {
+            women: [
+                { name: 'Blouse', image: 'https://images.unsplash.com/photo-1564257577054-00f39f2c9f06?w=300&h=300&fit=crop' },
+                { name: 'Dress', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&h=300&fit=crop' },
+                { name: 'Skirt', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=300&h=300&fit=crop' },
+                { name: 'Tops', image: 'https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=300&h=300&fit=crop' },
+                { name: 'Jeans', image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=300&h=300&fit=crop' },
+                { name: 'Jacket', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop' },
+                { name: 'Sweater', image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop' },
+                { name: 'Leggings', image: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=300&h=300&fit=crop' }
+            ],
+            men: [
+                { name: 'Shirt', image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=300&h=300&fit=crop' },
+                { name: 'T-Shirt', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop' },
+                { name: 'Jeans', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=300&h=300&fit=crop' },
+                { name: 'Trousers', image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop' },
+                { name: 'Jacket', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&h=300&fit=crop' },
+                { name: 'Sweater', image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=300&h=300&fit=crop' },
+                { name: 'Shorts', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=300&h=300&fit=crop' },
+                { name: 'Blazer', image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=300&h=300&fit=crop' }
+            ]
+        };
+        const products = {
+            'Blouse': [
+                {
+                    id: 1, name: 'Elegant Silk Blouse', price: '$49.99', image:
+                        'https://images.unsplash.com/photo-1564257577054-00f39f2c9f06?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 2, name: 'Casual Cotton Blouse', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 3, name: 'Floral Print Blouse', price: '$39.99', image:
+                        'https://images.unsplash.com/photo-1566206091558-7f218b696731?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 4, name: 'Formal White Blouse', price: '$44.99', image:
+                        'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 5, name: 'Designer Blouse', price: '$59.99', image:
+                        'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 6, name: 'Summer Blouse', price: '$29.99', image:
+                        'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=400&h=500&fit=crop'
+                }
+            ],
+            'Dress': [
+                {
+                    id: 7, name: 'Evening Gown', price: '$149.99', image:
+                        'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 8, name: 'Casual Summer Dress', price: '$54.99', image:
+                        'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 9, name: 'Cocktail Dress', price: '$89.99', image:
+                        'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 10, name: 'Maxi Dress', price: '$64.99', image:
+                        'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 11, name: 'Party Dress', price: '$79.99', image:
+                        'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 12, name: 'Floral Dress', price: '$49.99', image:
+                        'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=500&fit=crop'
+                }
+            ],
+            'Shirt': [
+                {
+                    id: 13, name: 'Formal White Shirt', price: '$39.99', image:
+                        'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 14, name: 'Casual Denim Shirt', price: '$44.99', image:
+                        'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 15, name: 'Check Pattern Shirt', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 16, name: 'Linen Shirt', price: '$49.99', image:
+                        'https://images.unsplash.com/photo-1598032895397-b9c3139d8e7e?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 17, name: 'Business Shirt', price: '$42.99', image:
+                        'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 18, name: 'Oxford Shirt', price: '$38.99', image:
+                        'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop'
+                }
+            ],
+            'T-Shirt': [
+                {
+                    id: 19, name: 'Basic Cotton Tee', price: '$19.99', image:
+                        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 20, name: 'Graphic Print Tee', price: '$24.99', image:
+                        'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 21, name: 'V-Neck Tee', price: '$22.99', image:
+                        'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 22, name: 'Polo Shirt', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 23, name: 'Crew Neck Tee', price: '$21.99', image:
+                        'https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 24, name: 'Henley Shirt', price: '$28.99', image:
+                        'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=500&fit=crop'
+                }
+            ],
+            'Jeans': [
+                {
+                    id: 25, name: 'Slim Fit Jeans', price: '$59.99', image:
+                        'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 26, name: 'Skinny Jeans', price: '$54.99', image:
+                        'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 27, name: 'Bootcut Jeans', price: '$64.99', image:
+                        'https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 28, name: 'Relaxed Fit Jeans', price: '$49.99', image:
+                        'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=500&fit=crop'
+                }
+            ],
+            'Skirt': [
+                {
+                    id: 29, name: 'Mini Skirt', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 30, name: 'Midi Skirt', price: '$39.99', image:
+                        'https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 31, name: 'Maxi Skirt', price: '$44.99', image:
+                        'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 32, name: 'Pleated Skirt', price: '$42.99', image:
+                        'https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=400&h=500&fit=crop'
+                }
+            ],
+            'Tops': [
+                {
+                    id: 33, name: 'Crop Top', price: '$24.99', image:
+                        'https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 34, name: 'Tank Top', price: '$19.99', image:
+                        'https://images.unsplash.com/photo-1624206112918-1cd3ba33423e?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 35, name: 'Tunic Top', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 36, name: 'Peplum Top', price: '$39.99', image:
+                        'https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=500&fit=crop'
+                }
+            ],
+            'Jacket': [
+                {
+                    id: 37, name: 'Leather Jacket', price: '$149.99', image:
+                        'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 38, name: 'Denim Jacket', price: '$69.99', image:
+                        'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 39, name: 'Bomber Jacket', price: '$89.99', image:
+                        'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 40, name: 'Windbreaker', price: '$54.99', image:
+                        'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=500&fit=crop'
+                }
+            ],
+            'Trousers': [
+                {
+                    id: 41, name: 'Formal Trousers', price: '$59.99', image:
+                        'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 42, name: 'Chino Pants', price: '$49.99', image:
+                        'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 43, name: 'Dress Pants', price: '$64.99', image:
+                        'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 44, name: 'Cargo Pants', price: '$54.99', image:
+                        'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&h=500&fit=crop'
+                }
+            ],
+            'Sweater': [
+                {
+                    id: 45, name: 'Pullover Sweater', price: '$44.99', image:
+                        'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 46, name: 'Cardigan', price: '$49.99', image:
+                        'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 47, name: 'Turtleneck Sweater', price: '$54.99', image:
+                        'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 48, name: 'Knit Sweater', price: '$52.99', image:
+                        'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=500&fit=crop'
+                }
+            ],
+            'Leggings': [
+                {
+                    id: 49, name: 'Athletic Leggings', price: '$29.99', image:
+                        'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 50, name: 'Yoga Pants', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 51, name: 'Compression Leggings', price: '$39.99', image:
+                        'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 52, name: 'Printed Leggings', price: '$32.99', image:
+                        'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=500&fit=crop'
+                }
+            ],
+            'Shorts': [
+                {
+                    id: 53, name: 'Casual Shorts', price: '$29.99', image:
+                        'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 54, name: 'Cargo Shorts', price: '$34.99', image:
+                        'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 55, name: 'Athletic Shorts', price: '$24.99', image:
+                        'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 56, name: 'Denim Shorts', price: '$32.99', image:
+                        'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=500&fit=crop'
+                }
+            ],
+            'Blazer': [
+                {
+                    id: 57, name: 'Business Blazer', price: '$119.99', image:
+                        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 58, name: 'Casual Blazer', price: '$99.99', image:
+                        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 59, name: 'Slim Fit Blazer', price: '$129.99', image:
+                        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=500&fit=crop'
+                },
+                {
+                    id: 60, name: 'Double Breasted Blazer', price: '$139.99', image:
+                        'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=500&fit=crop'
+                }
+            ]
+        };
+
+        const colors = [
+            { hex: '#FF6B6B', name: 'Red' },
+            { hex: '#4ECDC4', name: 'Teal' },
+            { hex: '#45B7D1', name: 'Blue' },
+            { hex: '#FFA07A', name: 'Coral' },
+            { hex: '#98D8C8', name: 'Mint' },
+            { hex: '#F7DC6F', name: 'Yellow' },
+            { hex: '#BB8FCE', name: 'Purple' },
+            { hex: '#85929E', name: 'Gray' },
+            { hex: '#000000', name: 'Black' },
+            { hex: '#FFFFFF', name: 'White' }
+        ];
+
+        const patterns = ['Solid', 'Striped', 'Dotted', 'Floral', 'Checkered'];
+        const designs = ['Classic', 'Modern', 'Vintage', 'Casual'];
+
+        // Authentication
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                alert('Please enter both email and password!');
+                return;
+            }
+
+            // Send login request to backend
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        appData.currentUser = data.user;
+                        document.getElementById('landingPage').style.display = 'none';
+                        document.getElementById('dashboard').classList.add('active');
+                        showPage('category');
+                    } else {
+                        alert(data.message || 'Login failed');
+                    }
+                })
+                .catch(error => {
+                    alert('Login error: ' + error.message);
+                });
+        }
+
+        function handleLogout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => {
+                    appData.currentUser = null;
+                    document.getElementById('dashboard').classList.remove('active');
+                    document.getElementById('landingPage').style.display = 'flex';
+                    document.getElementById('loginEmail').value = '';
+                    document.getElementById('loginPassword').value = '';
+                });
+        }
+
+        // Navigation
+        function showPage(pageName) {
+            const pages = ['categoryPage', 'typesPage', 'productsPage', 'customizePage', 'savedPage', 'profilePage'];
+            pages.forEach(page => {
+                document.getElementById(page).classList.add('hidden');
+            });
+            document.getElementById(pageName + 'Page').classList.remove('hidden');
+
+            if (pageName === 'saved') {
+                loadSavedDesigns();
+            }
+            if (pageName === 'profile') {
+                loadProfile();
+            }
+        }
+
+        function selectCategory(category) {
+            appData.selectedCategory = category;
+            loadClothingTypes();
+            showPage('types');
+        }
+
+        function loadClothingTypes() {
+            const types = clothingTypes[appData.selectedCategory];
+            const grid = document.getElementById('typesGrid');
+            const title = document.getElementById('typesTitle');
+            const breadcrumb = document.getElementById('currentCategory');
+
+            title.textContent = appData.selectedCategory.charAt(0).toUpperCase() + appData.selectedCategory.slice(1) + "'s Clothing";
+            breadcrumb.textContent = appData.selectedCategory.charAt(0).toUpperCase() + appData.selectedCategory.slice(1);
+
+            grid.innerHTML = types.map(type => `
+    <div class="type-card" onclick="selectType('${type.name}')">
+        <img src="${type.image}" alt="${type.name}">
+        <h3>${type.name}</h3>
+    </div>
+    `).join('');
+        }
+
+        function selectType(type) {
+            appData.selectedType = type;
+            loadProducts();
+            showPage('products');
+        }
+
+        function loadProducts() {
+            const productList = products[appData.selectedType] || [];
+            const grid = document.getElementById('productsGrid');
+            const title = document.getElementById('productsTitle');
+            const breadcrumbCat = document.getElementById('breadcrumbCategory');
+            const breadcrumbType = document.getElementById('breadcrumbType');
+
+            title.textContent = appData.selectedType + ' Collection';
+            breadcrumbCat.textContent = appData.selectedCategory.charAt(0).toUpperCase() + appData.selectedCategory.slice(1);
+            breadcrumbType.textContent = appData.selectedType;
+
+            grid.innerHTML = productList.map(product => `
+    <div class="product-card" onclick='selectProduct(${JSON.stringify(product)})'>
+        <div class="product-image">
+            <img src="${product.image}" alt="${product.name}">
+        </div>
+        <div class="product-info">
+            <h3>${product.name}</h3>
+            <p class="product-price">${product.price}</p>
+        </div>
+    </div>
+    `).join('');
+        }
+
+        function selectProduct(product) {
+            appData.selectedProduct = product;
+            loadCustomizePage();
+            showPage('customize');
+        }
+
+        function loadCustomizePage() {
+            const preview = document.getElementById('previewImage');
+            preview.src = appData.selectedProduct.image;
+
+            document.getElementById('customBreadcrumbCat').textContent = appData.selectedCategory.charAt(0).toUpperCase() +
+                appData.selectedCategory.slice(1);
+            document.getElementById('customBreadcrumbType').textContent = appData.selectedType;
+
+            // Load colors
+            const colorPalette = document.getElementById('colorPalette');
+            colorPalette.innerHTML = colors.map(color => `
+    <div class="color-option ${color.hex === appData.currentCustomization.color ? 'active' : ''}"
+        style="background-color: ${color.hex}; ${color.hex === '#FFFFFF' ? 'border: 2px solid #ddd;' : ''}"
+        onclick="selectColor('${color.hex}', '${color.name}')">
+    </div>
+    `).join('');
+
+            // Load patterns
+            const patternOptions = document.getElementById('patternOptions');
+            patternOptions.innerHTML = patterns.map(pattern => `
+    <button class="pattern-btn ${pattern === appData.currentCustomization.pattern ? 'active' : ''}"
+        onclick="selectPattern('${pattern}')">
+        ${pattern}
+    </button>
+    `).join('');
+
+            // Load designs
+            const designOptions = document.getElementById('designOptions');
+            designOptions.innerHTML = designs.map(design => `
+    <button class="design-btn ${design === appData.currentCustomization.design ? 'active' : ''}"
+        onclick="selectDesign('${design}')">
+        ${design}
+    </button>
+    `).join('');
+
+            updateSelectionSummary();
+        }
+
+        function selectColor(hex, name) {
+            appData.currentCustomization.color = hex;
+            appData.currentCustomization.colorName = name;
+
+            const preview = document.getElementById('previewImage');
+            const selectedParts = appData.selectedParts;
+
+            // Calculate hue rotation based on color
+            const hue = getHueRotation(hex);
+
+            if (selectedParts.full) {
+                // Apply to full image
+                preview.style.filter = `hue-rotate(${hue}deg) saturate(1.2)`;
+                appData.partColors.top = hex;
+                appData.partColors.middle = hex;
+                appData.partColors.bottom = hex;
+            } else {
+                // Apply to selected parts only
+                if (selectedParts.top) appData.partColors.top = hex;
+                if (selectedParts.middle) appData.partColors.middle = hex;
+                if (selectedParts.bottom) appData.partColors.bottom = hex;
+
+                applyPartialColorFilter();
+            }
+
+            document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+
+            updateSelectionSummary();
+        }
+
+        function getHueRotation(hexColor) {
+            // Map colors to hue rotations for better color transformation
+            const colorMap = {
+                '#FF6B6B': 0,
+                '#4ECDC4': 160,
+                '#45B7D1': 190,
+                '#FFA07A': 15,
+                '#DDA0DD': 300,
+                '#FFD700': 50,
+                '#98D8C8': 150,
+                '#F7B731': 45,
+                '#222222': 0,
+                '#000000': 0,
+                '#FFFFFF': 0
+            };
+            return colorMap[hexColor] || 0;
+        }
+
+        function applyPartialColorFilter() {
+            // Apply color filter based on selected parts
+            const preview = document.getElementById('previewImage');
+
+            if (appData.selectedParts.full) {
+                // Apply to entire image
+                const hue = getHueRotation(appData.partColors.top);
+                preview.style.filter = `hue-rotate(${hue}deg) saturate(1.2)`;
+            } else {
+                // For partial coloring, show which parts were changed
+                let mainHue = 0;
+
+                if (appData.selectedParts.top) {
+                    mainHue = getHueRotation(appData.partColors.top);
+                } else if (appData.selectedParts.middle) {
+                    mainHue = getHueRotation(appData.partColors.middle);
+                } else if (appData.selectedParts.bottom) {
+                    mainHue = getHueRotation(appData.partColors.bottom);
+                }
+
+                preview.style.filter = `hue-rotate(${mainHue}deg) saturate(1.2) brightness(1.05)`;
+            }
+        }
+
+        function selectDressPart(part) {
+            // Toggle selection of dress parts (top, middle, bottom, or full)
+            if (part === 'full') {
+                appData.selectedParts.full = true;
+                appData.selectedParts.top = false;
+                appData.selectedParts.middle = false;
+                appData.selectedParts.bottom = false;
+            } else {
+                appData.selectedParts.full = false;
+                appData.selectedParts[part] = !appData.selectedParts[part];
+
+                // If no parts selected, revert to full
+                if (!appData.selectedParts.top && !appData.selectedParts.middle && !appData.selectedParts.bottom) {
+                    appData.selectedParts.full = true;
+                }
+            }
+
+            updatePartSelection();
+        }
+
+        function updatePartSelection() {
+            const buttons = document.querySelectorAll('.part-selector');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            if (appData.selectedParts.full) {
+                const fullBtn = document.getElementById('partFull');
+                if (fullBtn) fullBtn.classList.add('active');
+            } else {
+                if (appData.selectedParts.top) {
+                    const topBtn = document.getElementById('partTop');
+                    if (topBtn) topBtn.classList.add('active');
+                }
+                if (appData.selectedParts.middle) {
+                    const midBtn = document.getElementById('partMiddle');
+                    if (midBtn) midBtn.classList.add('active');
+                }
+                if (appData.selectedParts.bottom) {
+                    const botBtn = document.getElementById('partBottom');
+                    if (botBtn) botBtn.classList.add('active');
+                }
+            }
+        }
+
+        function selectPattern(pattern) {
+            appData.currentCustomization.pattern = pattern;
+
+            document.querySelectorAll('.pattern-btn').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+
+            updateSelectionSummary();
+        }
+
+        function selectDesign(design) {
+            appData.currentCustomization.design = design;
+
+            document.querySelectorAll('.design-btn').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+
+            updateSelectionSummary();
+        }
+
+        function updateSelectionSummary() {
+            let partInfo = '';
+            if (appData.selectedParts.full) {
+                partInfo = 'Full Dress';
+            } else {
+                const parts = [];
+                if (appData.selectedParts.top) parts.push('Top');
+                if (appData.selectedParts.middle) parts.push('Middle');
+                if (appData.selectedParts.bottom) parts.push('Bottom');
+                partInfo = parts.length > 0 ? parts.join(', ') : 'Full Dress';
+            }
+
+            document.getElementById('selectedColor').textContent = appData.currentCustomization.colorName + ' (' + partInfo + ')';
+            document.getElementById('selectedPattern').textContent = appData.currentCustomization.pattern;
+            document.getElementById('selectedDesign').textContent = appData.currentCustomization.design;
+        }
+
+        function showSizeChart() {
+            document.getElementById('sizeChartModal').classList.add('active');
+        }
+
+        function closeSizeChart() {
+            document.getElementById('sizeChartModal').classList.remove('active');
+        }
+
+        function saveDesign() {
+            if (!appData.currentUser) {
+                alert('Please log in to save designs!');
+                return;
+            }
+
+            const savedDesigns = JSON.parse(localStorage.getItem('dressify_saved_' + appData.currentUser.email) || '[]');
+
+            const newDesign = {
+                id: Date.now(),
+                product: appData.selectedProduct,
+                customization: { ...appData.currentCustomization },
+                category: appData.selectedCategory,
+                type: appData.selectedType,
+                savedDate: new Date().toLocaleDateString()
+            };
+
+            savedDesigns.push(newDesign);
+            localStorage.setItem('dressify_saved_' + appData.currentUser.email, JSON.stringify(savedDesigns));
+
+            alert('Design saved successfully!');
+            showPage('saved');
+        }
+
+        function loadSavedDesigns() {
+            if (!appData.currentUser) {
+                document.getElementById('savedGrid').innerHTML = '';
+                document.getElementById('emptyState').classList.remove('hidden');
+                return;
+            }
+
+            const savedDesigns = JSON.parse(localStorage.getItem('dressify_saved_' + appData.currentUser.email) || '[]');
+            const grid = document.getElementById('savedGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (savedDesigns.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = savedDesigns.map(design => `
+    <div class="saved-card">
+        <div class="saved-image">
+            <img src="${design.product.image}" alt="${design.product.name}"
+                style="filter: hue-rotate(${Math.random() * 360}deg);">
+        </div>
+        <div class="saved-info">
+            <h3>${design.product.name}</h3>
+            <div class="design-details">
+                <p><strong>Color:</strong> ${design.customization.colorName}</p>
+                <p><strong>Pattern:</strong> ${design.customization.pattern}</p>
+                <p><strong>Design:</strong> ${design.customization.design}</p>
+                <p><strong>Category:</strong> ${design.category.charAt(0).toUpperCase() + design.category.slice(1)}</p>
+                <p><strong>Saved:</strong> ${design.savedDate}</p>
+            </div>
+                <div class="saved-actions">
+                    <button class="btn-download" onclick="downloadDesign(${design.id})">
+                        📥 Download
+                    </button>
+                    <button class="btn-delete" onclick="deleteDesign(${design.id})">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        function downloadDesign(designId) {
+            const savedDesigns = JSON.parse(localStorage.getItem('dressify_saved_' + appData.currentUser.email) || '[]');
+            const design = savedDesigns.find(d => d.id === designId);
+
+            if (!design) return;
+
+            // Create canvas for download
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 900;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Load image
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function () {
+                ctx.drawImage(img, 50, 50, 500, 600);
+
+                // Add design details
+                ctx.fillStyle = '#333333';
+                ctx.font = 'bold 28px Arial';
+                ctx.fillText('DRESSIFY', 50, 700);
+
+                ctx.font = '20px Arial';
+                ctx.fillText(`Product: ${design.product.name}`, 50, 740);
+                ctx.fillText(`Price: ${design.product.price}`, 50, 770);
+                ctx.fillText(`Color: ${design.customization.colorName}`, 50, 800);
+                ctx.fillText(`Pattern: ${design.customization.pattern}`, 50, 830);
+                ctx.fillText(`Design: ${design.customization.design}`, 50, 860);
+
+                // Download
+                const link = document.createElement('a');
+                link.download = `dressify - ${design.product.name.replace(/\s+/g, '-')} - ${designId}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            img.src = design.product.image;
+        }
+
+        function deleteDesign(designId) {
+            if (!confirm('Are you sure you want to delete this design?')) {
+                return;
+            }
+
+            let savedDesigns = JSON.parse(localStorage.getItem('dressify_saved_' + appData.currentUser.email) || '[]');
+            savedDesigns = savedDesigns.filter(d => d.id !== designId);
+            localStorage.setItem('dressify_saved_' + appData.currentUser.email, JSON.stringify(savedDesigns));
+
+            loadSavedDesigns();
+        }
+
+        function loadProfile() {
+            if (!appData.currentUser) {
+                document.getElementById('profileContent').innerHTML = '<p>Please login to view your profile.</p>';
+                return;
+            }
+
+            // Fetch user profile from backend
+            fetch('/api/user/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.user) {
+                        const user = data.user;
+                        document.getElementById('profileFullName').textContent = user.full_name || '-';
+                        document.getElementById('profileEmail').textContent = user.email || '-';
+                        document.getElementById('profileUsername').textContent = user.username || '-';
+                        document.getElementById('profilePhone').textContent = user.phone || '-';
+                        document.getElementById('profileAddress').textContent = user.address || '-';
+
+                        // Format date
+                        const createdAt = new Date(user.created_at);
+                        const formattedDate = createdAt.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        document.getElementById('profileCreatedAt').textContent = formattedDate || '-';
+                    } else {
+                        document.getElementById('profileContent').innerHTML = '<p>Failed to load profile.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('profileContent').innerHTML = '<p>Error loading profile. Please try again.</p>';
+                });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const sizeModal = document.getElementById('sizeChartModal');
+            const signupModal = document.getElementById('signupModal');
+
+            if (event.target === sizeModal) {
+                closeSizeChart();
+            }
+            if (event.target === signupModal) {
+                closeSignupModal();
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dressify | Outfit Customisation</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f8cdda, #1d2b64);
+            color: white;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        .intro {
+            width: 60%;
+            margin: auto;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .buttons {
+            margin: 30px;
+        }
+
+        button {
+            padding: 10px 25px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .form-box {
+            display: none;
+            background: white;
+            color: black;
+            width: 320px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .form-box h2 {
+            margin-bottom: 15px;
+        }
+
+        .form-box input {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        .login-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            width: 350px;
+            margin: 30px auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            box-sizing: border-box;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: linear-gradient(to right, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-form button:hover {
+            opacity: 0.8;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #ffb3c1;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Logo -->
+        <img src="logo.png" alt="Dressify Logo" class="logo"> <!-- Intro -->
+        <h1>Welcome to Dressify</h1>
+        <p class="intro">
+            Dressify is an outfit customization website that allows users to design,
+            personalize, and save outfits by choosing colors, pattern
+        </p>
+
+        <!-- User Login Section -->
+        <div class="login-section">
+            <h2>User Login</h2>
+            <form class="login-form" method="POST" action="/login">
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="password" name="password" placeholder="Enter your password" required>
+                <button type="submit">Login</button>
+                <div class="login-link">
+                    Don't have an account? <a href="/signup">Sign up here</a>
+                </div>
+            </form>
+        </div>
