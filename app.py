@@ -4,16 +4,20 @@ import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__, template_folder='templates')
-app.secret_key = 'your_secret_key_change_this_to_random_string'
+app.secret_key = os.getenv('SECRET_KEY', 'your_secret_key_change_this_to_random_string')
 
-# MySQL Configuration
+# MySQL Configuration - Read from environment variables
 MYSQL_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'password',  # CHANGE THIS TO YOUR MYSQL PASSWORD
-    'database': 'dressify',
+    'host': os.getenv('MYSQL_HOST', 'localhost'),
+    'user': os.getenv('MYSQL_USER', 'root'),
+    'password': os.getenv('MYSQL_PASSWORD', 'password'),
+    'database': os.getenv('MYSQL_DATABASE', 'dressify'),
     'autocommit': True
 }
 
