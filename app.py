@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/static')
 app.secret_key = os.getenv('SECRET_KEY', 'your_secret_key_change_this_to_random_string')
 
 # MySQL Configuration - Read from environment variables
@@ -18,7 +18,7 @@ MYSQL_CONFIG = {
     'user': os.getenv('MYSQL_USER', 'root'),
     'password': os.getenv('MYSQL_PASSWORD', 'password'),
     'database': os.getenv('MYSQL_DATABASE', 'dressify'),
-    'port': 3306,
+    'port': int(os.getenv('MYSQL_PORT', '3306')),
     'autocommit': True
 }
 
