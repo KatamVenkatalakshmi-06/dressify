@@ -1,0 +1,62 @@
+# PythonAnywhere Configuration Guide
+# This file contains helper information for PythonAnywhere deployment
+
+## Quick Setup for PythonAnywhere:
+
+1. **Create Free Account**
+   - Visit: https://www.pythonanywhere.com
+   - Sign up (free tier available)
+
+2. **Clone Repository**
+   - Open Bash Console
+   - Run: git clone https://github.com/your-username/dressify.git
+
+3. **Add Web App**
+   - Click Web tab → Add a new web app
+   - Choose Flask
+   - Select Python 3.9 or higher
+   - Specify source code path: /home/yourusername/dressify
+
+4. **Update WSGI Configuration**
+   - Edit WSGI file with this Flask configuration:
+   
+   ```python
+   import sys
+   import os
+   
+   # Add project directory to path
+   project_home = '/home/yourusername/dressify'
+   if project_home not in sys.path:
+       sys.path.insert(0, project_home)
+   
+   # Load environment variables
+   from dotenv import load_dotenv
+   load_dotenv(os.path.join(project_home, '.env'))
+   
+   # Import Flask app
+   from app import app as application
+   ```
+
+5. **Install Dependencies**
+   - Run in Bash: cd ~/dressify && pip install --user -r requirements.txt
+
+6. **Set Environment Variables**
+   - In Web app settings, add these variables:
+     - MYSQL_HOST
+     - MYSQL_USER
+     - MYSQL_PASSWORD
+     - MYSQL_DATABASE
+     - MYSQL_PORT
+     - SECRET_KEY
+     - FLASK_ENV=production
+
+7. **Reload Web App**
+   - Click the Reload button for your domain
+   - Your app will be available at https://yourusername.pythonanywhere.com
+
+## Troubleshooting:
+
+- Check error log in Web app settings for debugging
+- Use Bash console to test: python setup_check.py
+- Reload after git pull: git pull origin main && reload button
+- MySQL may require additional payment on free tier
